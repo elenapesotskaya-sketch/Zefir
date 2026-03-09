@@ -171,6 +171,38 @@ const catalogItems = [
     imageUrl:
       'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-FyH9UsEDdPPzuMEwAxvfqCYyiKLmmF.png',
   },
+
+  // Compliments
+  {
+    id: 'compliment-1',
+    sectionId: 'compliments',
+    name: 'Набор из 5 капкейков',
+    description: 'Разные цвета',
+    price: 50,
+    inStock: true,
+    imageUrl:
+      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-gSRW40vEgm3wcXCWRK2mzfiIKtOmgs.png',
+  },
+  {
+    id: 'compliment-2',
+    sectionId: 'compliments',
+    name: 'Один капкейк',
+    description: 'С розовым тюльпаном',
+    price: 50,
+    inStock: true,
+    imageUrl:
+      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-hJYMWBBCJuvSSBX8zDDx34fDmBNnEj.png',
+  },
+  {
+    id: 'compliment-3',
+    sectionId: 'compliments',
+    name: 'Три капкейка',
+    description: 'С фиолетовыми тюльпанами',
+    price: 50,
+    inStock: true,
+    imageUrl:
+      'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-f1g3Pae7jkJNEcxDdW5G10Nr6dQpTK.png',
+  },
 ];
 
 async function initCatalog() {

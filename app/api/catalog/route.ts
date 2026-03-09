@@ -28,16 +28,33 @@ export async function GET(request: Request) {
     });
 
     if (!blob) {
-      return Response.json({ error: 'Catalog not found' }, { status: 404 });
+      return Response.json({ error: 'Catalog not found' }, { status: 404 }, {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      });
     }
 
     const catalogData = JSON.parse(await blob.text()) as CatalogData;
-    return Response.json(catalogData);
+    return Response.json(catalogData, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
+    });
   } catch (error) {
     console.error('Error reading catalog:', error);
     return Response.json(
       { error: 'Failed to read catalog', items: [], lastUpdated: new Date().toISOString() },
-      { status: 200 }
+      { status: 200 },
+      {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+        },
+      }
     );
   }
 }
@@ -84,14 +101,26 @@ export async function POST(request: Request) {
 
     // Save to blob
     catalogData.lastUpdated = new Date().toISOString();
+    console.log("[v0] Saving catalog with item:", item);
     await put(CATALOG_KEY, JSON.stringify(catalogData), {
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
       access: 'private',
     });
 
-    return Response.json({ success: true, data: catalogData });
+    console.log("[v0] Catalog saved successfully");
+    return Response.json({ success: true, data: catalogData }, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
+    });
   } catch (error) {
     console.error('Error updating catalog:', error);
-    return Response.json({ error: 'Failed to update catalog' }, { status: 500 });
+    return Response.json({ error: 'Failed to update catalog' }, { status: 500 }, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+      },
+    });
   }
 }

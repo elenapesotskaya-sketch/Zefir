@@ -54,7 +54,12 @@ export function CatalogDisplay({
 
   const loadCatalog = async () => {
     try {
-      const response = await fetch('/api/catalog');
+      const response = await fetch('/api/catalog', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+        }
+      });
       const data = await response.json();
       if (data.items) {
         setDynamicItems(data.items);
@@ -84,7 +89,7 @@ export function CatalogDisplay({
 
       if (response.ok) {
         // Small delay to ensure backend has written data
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise(resolve => setTimeout(resolve, 500));
         await loadCatalog();
       } else {
         throw new Error('Failed to save');

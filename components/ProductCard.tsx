@@ -89,6 +89,12 @@ export function ProductCard({
     try {
       await onSave(editData);
       setHasChanges(false);
+      // Force re-sync with props after save
+      setTimeout(() => {
+        setEditData(editData);
+      }, 500);
+    } catch (error) {
+      console.error("Failed to save:", error);
     } finally {
       setIsSaving(false);
     }

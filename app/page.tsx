@@ -445,6 +445,12 @@ export default function Home() {
                 <div className="p-4">
                   <p className="font-semibold text-sm">Набор из 5 капкейков</p>
                   <p className="text-xs text-muted-foreground">Разные цвета</p>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
+                    <span className="font-semibold text-sm">50 EUR</span>
+                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+                      ✓ В наличии
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -461,6 +467,12 @@ export default function Home() {
                 <div className="p-4">
                   <p className="font-semibold text-sm">Один капкейк</p>
                   <p className="text-xs text-muted-foreground">С розовым тюльпаном</p>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
+                    <span className="font-semibold text-sm">50 EUR</span>
+                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+                      ✓ В наличии
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -477,6 +489,12 @@ export default function Home() {
                 <div className="p-4">
                   <p className="font-semibold text-sm">Три капкейка</p>
                   <p className="text-xs text-muted-foreground">С фиолетовыми тюльпанами</p>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
+                    <span className="font-semibold text-sm">50 EUR</span>
+                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+                      ✓ В наличии
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -488,7 +506,7 @@ export default function Home() {
             <p className="text-center text-muted-foreground mb-8">Открытки, поздравления и украшения для особых подарков</p>
             <div className="grid md:grid-cols-4 gap-6">
               <div className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-lg transition-all group">
-                <div className="h-48 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
+                <div className="h-72 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
                   <Image
                     src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-s2d8RguGm7tHFoWLu3LGBGhHhGBMVm.png"
                     alt="Букет с поздравительной открыткой"
