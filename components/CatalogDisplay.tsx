@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ChevronDown } from 'lucide-react';
+import { ProductCard } from '@/components/ProductCard';
 
 interface CatalogItem {
   id: string;
@@ -28,12 +29,14 @@ interface CatalogDisplayProps {
   catalogSections: CatalogSection[];
   expandedCatalog: string | null;
   onToggleSection: (sectionId: string) => void;
+  isEditing?: boolean;
 }
 
 export function CatalogDisplay({
   catalogSections,
   expandedCatalog,
   onToggleSection,
+  isEditing = false,
 }: CatalogDisplayProps) {
   const [dynamicItems, setDynamicItems] = useState<CatalogItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +56,31 @@ export function CatalogDisplay({
       console.error('Failed to load catalog:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSaveItem = async (itemId: string, itemData: any, sectionId?: string) => {
+    try {
+      const response = await fetch('/api/catalog', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password: '1931',
+          action: 'update-item',
+          item: {
+            id: itemId,
+            sectionId: sectionId || itemId,
+            ...itemData,
+          },
+        }),
+      });
+
+      if (response.ok) {
+        await loadCatalog();
+      }
+    } catch (error) {
+      console.error('Failed to save item:', error);
+      throw error;
     }
   };
 
@@ -86,43 +114,24 @@ export function CatalogDisplay({
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
                 {displayItems.map((item, idx) => {
                   const dbItem = dbItems.find((i) => i.name === item.name);
+                  const itemId = dbItem?.id || item.name;
                   const price = dbItem?.price || 50;
                   const inStock = dbItem?.inStock !== false;
                   const imageUrl = dbItem?.imageUrl || item.img;
+                  const description = dbItem?.description || 'Натуральный зефир ручной работы';
 
                   return (
-                    <div
+                    <ProductCard
                       key={idx}
-                      className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all hover:border-primary/40 group"
-                    >
-                      <div className="h-64 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
-                        <Image
-                          src={imageUrl}
-                          alt={item.name}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
-                      <div className="p-6">
-                        <h5 className="font-semibold text-lg">{item.name}</h5>
-                        <p className="text-sm text-muted-foreground mt-2">
-                          Натуральный зефир ручной работы
-                        </p>
-                        <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/50">
-                          <span className="font-semibold text-lg">{price} EUR</span>
-                          {inStock ? (
-                            <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
-                              ✓ В наличии
-                            </span>
-                          ) : (
-                            <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">
-                              Закончилось
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                      id={itemId}
+                      name={item.name}
+                      description={description}
+                      price={price}
+                      inStock={inStock}
+                      imageUrl={imageUrl}
+                      isEditing={isEditing}
+                      onSave={(data) => handleSaveItem(itemId, data, section.id)}
+                    />
                   );
                 })}
               </div>

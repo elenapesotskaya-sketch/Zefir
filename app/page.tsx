@@ -5,14 +5,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, Heart, Gift, Sparkles, Flower2, ChevronDown, Edit3 } from 'lucide-react';
 import { PasswordModal } from '@/components/PasswordModal';
-import { CatalogEditor } from '@/components/CatalogEditor';
 import { CatalogDisplay } from '@/components/CatalogDisplay';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedCatalog, setExpandedCatalog] = useState<string | null>('bouquets');
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-  const [isCatalogEditorOpen, setIsCatalogEditorOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -26,7 +25,7 @@ export default function Home() {
 
   const handlePasswordSuccess = () => {
     setIsPasswordModalOpen(false);
-    setIsCatalogEditorOpen(true);
+    setIsEditing(true);
   };
 
   const catalogSections = [
@@ -425,6 +424,7 @@ export default function Home() {
             catalogSections={catalogSections}
             expandedCatalog={expandedCatalog}
             onToggleSection={(sectionId) => setExpandedCatalog(expandedCatalog === sectionId ? null : sectionId)}
+            isEditing={isEditing}
           />
 
           {/* Compliments Section */}
@@ -758,14 +758,24 @@ export default function Home() {
             <p className="text-sm text-muted-foreground">
               © 2026 Sweet Bouquet Lab. Все права защищены.
             </p>
-            <div className="flex justify-center">
-              <button
-                onClick={handleEditClick}
-                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:shadow-lg transition-all hover:scale-105 text-sm font-medium"
-              >
-                <Edit3 className="w-4 h-4" />
-                Редактировать каталог
-              </button>
+            <div className="flex justify-center gap-3">
+              {isEditing && (
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:shadow-lg transition-all text-sm font-medium"
+                >
+                  Выход из редактирования
+                </button>
+              )}
+              {!isEditing && (
+                <button
+                  onClick={handleEditClick}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:shadow-lg transition-all hover:scale-105 text-sm font-medium"
+                >
+                  <Edit3 className="w-4 h-4" />
+                  Редактировать каталог
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -775,11 +785,6 @@ export default function Home() {
         isOpen={isPasswordModalOpen}
         onClose={() => setIsPasswordModalOpen(false)}
         onSuccess={handlePasswordSuccess}
-      />
-
-      <CatalogEditor
-        isOpen={isCatalogEditorOpen}
-        onClose={() => setIsCatalogEditorOpen(false)}
       />
     </div>
   );
