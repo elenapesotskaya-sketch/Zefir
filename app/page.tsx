@@ -204,13 +204,13 @@ export default function Home() {
                 className="object-cover"
                 priority
               />
-              {/* Logo Badge */}
-              <div className="absolute bottom-4 right-4 w-20 h-20 rounded-full bg-white/90 border-2 border-white shadow-lg p-1 flex items-center justify-center">
+              {/* Logo Badge - Enlarged */}
+              <div className="absolute bottom-4 right-4 w-28 h-28 rounded-full shadow-lg p-1 flex items-center justify-center">
                 <Image
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-9m1yaAAueaYKKwiVmWehHgZEsbMNV7.png"
                   alt="Berlin Sweet Bouquet Zefir Logo"
-                  width={76}
-                  height={76}
+                  width={110}
+                  height={110}
                   className="rounded-full object-cover"
                 />
               </div>
@@ -657,33 +657,38 @@ export default function Home() {
               <h4 className="text-2xl font-semibold mb-8 text-primary text-center">Связаться с нами</h4>
 
               <div className="space-y-6">
-                <div className="flex items-start gap-4">
+                <div className="flex flex-col md:flex-row items-center gap-8">
                   <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-20 w-20 rounded-full bg-primary/10 text-primary overflow-hidden border-2 border-primary/20">
+                    <div className="flex items-center justify-center h-64 w-64 rounded-full bg-primary/10 text-primary overflow-hidden border-2 border-primary/20">
                       <Image
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo%20Elena-K8O2BhpVCTpNOZkijb6XHaswOtaOrx.jpg"
                         alt="Елена - создатель Sweet Bouquet Lab"
-                        width={80}
-                        height={80}
+                        width={256}
+                        height={256}
                         className="object-cover"
                       />
                     </div>
                   </div>
-                  <div>
-                    <h5 className="font-semibold mb-2">Хозяйка мастерской</h5>
-                    <p className="text-muted-foreground text-lg">
+                  <div className="flex-1">
+                    <h5 className="font-semibold mb-2 text-lg">Хозяйка мастерской</h5>
+                    <p className="text-muted-foreground text-lg mb-2">
                       <strong>Елена</strong>
                     </p>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-sm text-muted-foreground mb-6">
                       Создатель Sweet Bouquet Lab, специалист по ручному изготовлению букетов из натурального зефира.
                     </p>
+                    <a
+                      href="https://wa.me/49176841353185?text=Здравствуйте!%20Хочу%20заказать%20букет%20из%20зефира."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-all hover:shadow-lg"
+                    >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-5.031 1.378c-1.87 1.246-3.045 3.006-3.045 4.926 0 1.211.23 2.379.646 3.483L2.817 22l3.897-1.284c1.022.572 2.151.906 3.379.906 4.165 0 7.571-3.385 7.571-7.557 0-2.02-.779-3.907-2.207-5.335a7.471 7.471 0 00-5.314-2.047z"/>
+                      </svg>
+                      Заказать в WhatsApp
+                    </a>
                   </div>
-                </div>
-
-                <div className="border-t border-border pt-6">
-                  <p className="text-center text-muted-foreground">
-                    <em>Детали контактов и способы связи будут добавлены позже</em>
-                  </p>
                 </div>
 
                 <div className="bg-accent/10 rounded-lg p-4 mt-8">
