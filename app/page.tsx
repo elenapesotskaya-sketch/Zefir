@@ -3,16 +3,30 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Heart, Gift, Sparkles, Flower2, ChevronDown } from 'lucide-react';
+import { Menu, X, Heart, Gift, Sparkles, Flower2, ChevronDown, Edit3 } from 'lucide-react';
+import { PasswordModal } from '@/components/PasswordModal';
+import { CatalogEditor } from '@/components/CatalogEditor';
+import { CatalogDisplay } from '@/components/CatalogDisplay';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedCatalog, setExpandedCatalog] = useState<string | null>('bouquets');
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isCatalogEditorOpen, setIsCatalogEditorOpen] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
     setIsMenuOpen(false);
+  };
+
+  const handleEditClick = () => {
+    setIsPasswordModalOpen(true);
+  };
+
+  const handlePasswordSuccess = () => {
+    setIsPasswordModalOpen(false);
+    setIsCatalogEditorOpen(true);
   };
 
   const catalogSections = [
@@ -244,7 +258,7 @@ export default function Home() {
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-start gap-3">
                     <span className="text-primary font-bold">•</span>
-                    <span>Натуральное пюре из фруктов и ягод</span>
+                    <span>Натуральное ��юре из фруктов и ягод</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-primary font-bold">•</span>
@@ -407,53 +421,11 @@ export default function Home() {
           </p>
 
           {/* Catalog Tabs */}
-          <div className="space-y-8">
-            {catalogSections.map((section) => (
-              <div key={section.id} className="space-y-4">
-                <button
-                  onClick={() => setExpandedCatalog(expandedCatalog === section.id ? null : section.id)}
-                  className="w-full bg-card rounded-xl p-6 border border-border hover:border-primary/40 transition-colors flex items-center justify-between"
-                >
-                  <div className="text-left">
-                    <h4 className="text-xl font-semibold text-primary mb-1">{section.title}</h4>
-                    <p className="text-sm text-muted-foreground">{section.description}</p>
-                  </div>
-                  <ChevronDown
-                    className={`w-6 h-6 text-primary transition-transform ${
-                      expandedCatalog === section.id ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-
-                {expandedCatalog === section.id && (
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-                    {section.items.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all hover:border-primary/40 group"
-                      >
-                        <div className="h-64 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
-                          <Image
-                            src={item.img}
-                            alt={item.name}
-                            fill
-                            className="object-cover group-hover:scale-110 transition-transform duration-300"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </div>
-                        <div className="p-6">
-                          <h5 className="font-semibold text-lg">{item.name}</h5>
-                          <p className="text-sm text-muted-foreground mt-2">
-                            Натуральный зефир ручной работы
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          <CatalogDisplay
+            catalogSections={catalogSections}
+            expandedCatalog={expandedCatalog}
+            onToggleSection={(sectionId) => setExpandedCatalog(expandedCatalog === sectionId ? null : sectionId)}
+          />
 
           {/* Compliments Section */}
           <div className="mt-16">
@@ -782,13 +754,33 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="border-t border-border mt-8 pt-8 text-center">
+          <div className="border-t border-border mt-8 pt-8 text-center space-y-6">
             <p className="text-sm text-muted-foreground">
               © 2026 Sweet Bouquet Lab. Все права защищены.
             </p>
+            <div className="flex justify-center">
+              <button
+                onClick={handleEditClick}
+                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:shadow-lg transition-all hover:scale-105 text-sm font-medium"
+              >
+                <Edit3 className="w-4 h-4" />
+                Редактировать каталог
+              </button>
+            </div>
           </div>
         </div>
       </footer>
+
+      <PasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+        onSuccess={handlePasswordSuccess}
+      />
+
+      <CatalogEditor
+        isOpen={isCatalogEditorOpen}
+        onClose={() => setIsCatalogEditorOpen(false)}
+      />
     </div>
   );
 }
