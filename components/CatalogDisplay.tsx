@@ -45,6 +45,13 @@ export function CatalogDisplay({
     loadCatalog();
   }, []);
 
+  // Reload catalog when exiting edit mode
+  useEffect(() => {
+    if (!isEditing) {
+      loadCatalog();
+    }
+  }, [isEditing]);
+
   const loadCatalog = async () => {
     try {
       const response = await fetch('/api/catalog');
@@ -76,7 +83,11 @@ export function CatalogDisplay({
       });
 
       if (response.ok) {
+        // Small delay to ensure backend has written data
+        await new Promise(resolve => setTimeout(resolve, 300));
         await loadCatalog();
+      } else {
+        throw new Error('Failed to save');
       }
     } catch (error) {
       console.error('Failed to save item:', error);

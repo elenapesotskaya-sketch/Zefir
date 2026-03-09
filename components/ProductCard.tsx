@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Upload, Loader2 } from 'lucide-react';
 
@@ -41,6 +41,18 @@ export function ProductCard({
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+
+  // Sync props to local state when props change (after save)
+  useEffect(() => {
+    setEditData({
+      name,
+      description,
+      price,
+      inStock,
+      imageUrl,
+    });
+    setHasChanges(false);
+  }, [name, description, price, inStock, imageUrl]);
 
   const handleFieldChange = (field: string, value: any) => {
     setEditData((prev) => ({ ...prev, [field]: value }));

@@ -257,7 +257,7 @@ export default function Home() {
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-start gap-3">
                     <span className="text-primary font-bold">•</span>
-                    <span>Натуральное ��юре из фруктов и ягод</span>
+                    <span>Натуральное пюре из фруктов и ягод</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-primary font-bold">•</span>
@@ -546,11 +546,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-12 text-center">
-            <p className="text-muted-foreground mb-4">
-              Хотите особый букет? Мы создаём индивидуальные композиции по вашим пожеланиям!
-            </p>
-          </div>
+
         </div>
       </section>
 
@@ -641,6 +637,11 @@ export default function Home() {
                 <p className="text-sm text-muted-foreground">С окошком для демонстрации букета</p>
               </div>
             </div>
+            <div className="mt-8 pt-8 border-t border-border text-center">
+              <p className="text-muted-foreground">
+                Хотите особый букет? Мы создаём индивидуальные композиции по вашим пожеланиям!
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -678,7 +679,7 @@ export default function Home() {
                       Создатель Sweet Bouquet Lab, специалист по ручному изготовлению букетов из натурального зефира.
                     </p>
                     <a
-                      href="https://wa.me/49176841353185?text=Здравствуйте!%20Хочу%20заказать%20букет%20из%20зефира."
+                      href="https://wa.me/4917684135318?text=Здравствуйте!%20Хочу%20заказать%20букет%20из%20зефира."
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-all hover:shadow-lg"
