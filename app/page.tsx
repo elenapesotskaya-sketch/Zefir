@@ -3,16 +3,29 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Heart, Gift, Sparkles, Flower2, ChevronDown } from 'lucide-react';
+import { Menu, X, Heart, Gift, Sparkles, Flower2, ChevronDown, Edit3 } from 'lucide-react';
+import { PasswordModal } from '@/components/PasswordModal';
+import { CatalogDisplay } from '@/components/CatalogDisplay';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedCatalog, setExpandedCatalog] = useState<string | null>('bouquets');
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
     setIsMenuOpen(false);
+  };
+
+  const handleEditClick = () => {
+    setIsPasswordModalOpen(true);
+  };
+
+  const handlePasswordSuccess = () => {
+    setIsPasswordModalOpen(false);
+    setIsEditing(true);
   };
 
   const catalogSections = [
@@ -191,13 +204,13 @@ export default function Home() {
                 className="object-cover"
                 priority
               />
-              {/* Logo Badge */}
-              <div className="absolute bottom-4 right-4 w-20 h-20 rounded-full bg-white/90 border-2 border-white shadow-lg p-1 flex items-center justify-center">
+              {/* Logo Badge - Enlarged */}
+              <div className="absolute bottom-4 right-4 w-28 h-28 rounded-full shadow-lg p-1 flex items-center justify-center">
                 <Image
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-9m1yaAAueaYKKwiVmWehHgZEsbMNV7.png"
                   alt="Berlin Sweet Bouquet Zefir Logo"
-                  width={76}
-                  height={76}
+                  width={110}
+                  height={110}
                   className="rounded-full object-cover"
                 />
               </div>
@@ -407,53 +420,12 @@ export default function Home() {
           </p>
 
           {/* Catalog Tabs */}
-          <div className="space-y-8">
-            {catalogSections.map((section) => (
-              <div key={section.id} className="space-y-4">
-                <button
-                  onClick={() => setExpandedCatalog(expandedCatalog === section.id ? null : section.id)}
-                  className="w-full bg-card rounded-xl p-6 border border-border hover:border-primary/40 transition-colors flex items-center justify-between"
-                >
-                  <div className="text-left">
-                    <h4 className="text-xl font-semibold text-primary mb-1">{section.title}</h4>
-                    <p className="text-sm text-muted-foreground">{section.description}</p>
-                  </div>
-                  <ChevronDown
-                    className={`w-6 h-6 text-primary transition-transform ${
-                      expandedCatalog === section.id ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-
-                {expandedCatalog === section.id && (
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-                    {section.items.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all hover:border-primary/40 group"
-                      >
-                        <div className="h-64 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
-                          <Image
-                            src={item.img}
-                            alt={item.name}
-                            fill
-                            className="object-cover group-hover:scale-110 transition-transform duration-300"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </div>
-                        <div className="p-6">
-                          <h5 className="font-semibold text-lg">{item.name}</h5>
-                          <p className="text-sm text-muted-foreground mt-2">
-                            Натуральный зефир ручной работы
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          <CatalogDisplay
+            catalogSections={catalogSections}
+            expandedCatalog={expandedCatalog}
+            onToggleSection={(sectionId) => setExpandedCatalog(expandedCatalog === sectionId ? null : sectionId)}
+            isEditing={isEditing}
+          />
 
           {/* Compliments Section */}
           <div className="mt-16">
@@ -473,6 +445,12 @@ export default function Home() {
                 <div className="p-4">
                   <p className="font-semibold text-sm">Набор из 5 капкейков</p>
                   <p className="text-xs text-muted-foreground">Разные цвета</p>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
+                    <span className="font-semibold text-sm">50 EUR</span>
+                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+                      ✓ В наличии
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -489,6 +467,12 @@ export default function Home() {
                 <div className="p-4">
                   <p className="font-semibold text-sm">Один капкейк</p>
                   <p className="text-xs text-muted-foreground">С розовым тюльпаном</p>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
+                    <span className="font-semibold text-sm">50 EUR</span>
+                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+                      ✓ В наличии
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -505,6 +489,12 @@ export default function Home() {
                 <div className="p-4">
                   <p className="font-semibold text-sm">Три капкейка</p>
                   <p className="text-xs text-muted-foreground">С фиолетовыми тюльпанами</p>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
+                    <span className="font-semibold text-sm">50 EUR</span>
+                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+                      ✓ В наличии
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -516,7 +506,7 @@ export default function Home() {
             <p className="text-center text-muted-foreground mb-8">Открытки, поздравления и украшения для особых подарков</p>
             <div className="grid md:grid-cols-4 gap-6">
               <div className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-lg transition-all group">
-                <div className="h-48 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
+                <div className="h-72 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
                   <Image
                     src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-s2d8RguGm7tHFoWLu3LGBGhHhGBMVm.png"
                     alt="Букет с поздравительной открыткой"
@@ -574,11 +564,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-12 text-center">
-            <p className="text-muted-foreground mb-4">
-              Хотите особый букет? Мы создаём индивидуальные композиции по вашим пожеланиям!
-            </p>
-          </div>
+
         </div>
       </section>
 
@@ -669,6 +655,11 @@ export default function Home() {
                 <p className="text-sm text-muted-foreground">С окошком для демонстрации букета</p>
               </div>
             </div>
+            <div className="mt-8 pt-8 border-t border-border text-center">
+              <p className="text-muted-foreground">
+                Хотите особый букет? Мы создаём индивидуальные композиции по вашим пожеланиям!
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -685,33 +676,38 @@ export default function Home() {
               <h4 className="text-2xl font-semibold mb-8 text-primary text-center">Связаться с нами</h4>
 
               <div className="space-y-6">
-                <div className="flex items-start gap-4">
+                <div className="flex flex-col md:flex-row items-center gap-8">
                   <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-20 w-20 rounded-full bg-primary/10 text-primary overflow-hidden border-2 border-primary/20">
+                    <div className="flex items-center justify-center h-64 w-64 rounded-full bg-primary/10 text-primary overflow-hidden border-2 border-primary/20">
                       <Image
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/photo%20Elena-K8O2BhpVCTpNOZkijb6XHaswOtaOrx.jpg"
                         alt="Елена - создатель Sweet Bouquet Lab"
-                        width={80}
-                        height={80}
+                        width={256}
+                        height={256}
                         className="object-cover"
                       />
                     </div>
                   </div>
-                  <div>
-                    <h5 className="font-semibold mb-2">Хозяйка мастерской</h5>
-                    <p className="text-muted-foreground text-lg">
+                  <div className="flex-1">
+                    <h5 className="font-semibold mb-2 text-lg">Хозяйка мастерской</h5>
+                    <p className="text-muted-foreground text-lg mb-2">
                       <strong>Елена</strong>
                     </p>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-sm text-muted-foreground mb-6">
                       Создатель Sweet Bouquet Lab, специалист по ручному изготовлению букетов из натурального зефира.
                     </p>
+                    <a
+                      href="https://wa.me/4917684135318?text=Здравствуйте!%20Хочу%20заказать%20букет%20из%20зефира."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-all hover:shadow-lg"
+                    >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-5.031 1.378c-1.87 1.246-3.045 3.006-3.045 4.926 0 1.211.23 2.379.646 3.483L2.817 22l3.897-1.284c1.022.572 2.151.906 3.379.906 4.165 0 7.571-3.385 7.571-7.557 0-2.02-.779-3.907-2.207-5.335a7.471 7.471 0 00-5.314-2.047z"/>
+                      </svg>
+                      Заказать в WhatsApp
+                    </a>
                   </div>
-                </div>
-
-                <div className="border-t border-border pt-6">
-                  <p className="text-center text-muted-foreground">
-                    <em>Детали контактов и способы связи будут добавлены позже</em>
-                  </p>
                 </div>
 
                 <div className="bg-accent/10 rounded-lg p-4 mt-8">
@@ -782,13 +778,38 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="border-t border-border mt-8 pt-8 text-center">
+          <div className="border-t border-border mt-8 pt-8 text-center space-y-6">
             <p className="text-sm text-muted-foreground">
               © 2026 Sweet Bouquet Lab. Все права защищены.
             </p>
+            <div className="flex justify-center gap-3">
+              {isEditing && (
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:shadow-lg transition-all text-sm font-medium"
+                >
+                  Выход из редактирования
+                </button>
+              )}
+              {!isEditing && (
+                <button
+                  onClick={handleEditClick}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:shadow-lg transition-all hover:scale-105 text-sm font-medium"
+                >
+                  <Edit3 className="w-4 h-4" />
+                  Редактировать каталог
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </footer>
+
+      <PasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+        onSuccess={handlePasswordSuccess}
+      />
     </div>
   );
 }
