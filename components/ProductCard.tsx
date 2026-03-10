@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Upload, Loader2 } from 'lucide-react';
+import { OptimizedImage } from '@/components/OptimizedImage';
+import { getValidImageUrl, RESPONSIVE_SIZES } from '@/lib/imageUtils';
 
 interface ProductCardProps {
   id: string;
@@ -106,13 +108,15 @@ export function ProductCard({
     return (
       <div className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all hover:border-primary/40 group">
         <div className="h-64 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
-          <Image
+          <OptimizedImage
             src={imageUrl}
             alt={name}
+            width={500}
+            height={500}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-300"
             loading="lazy"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes={RESPONSIVE_SIZES.product}
             quality={75}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -142,13 +146,15 @@ export function ProductCard({
     <div className="bg-card rounded-2xl border border-primary/40 overflow-hidden shadow-md">
       <div className="relative">
         <div className="h-48 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
-          <Image
+          <OptimizedImage
             src={editData.imageUrl}
             alt={editData.name}
+            width={500}
+            height={300}
             fill
             className="object-cover"
             loading="lazy"
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes={RESPONSIVE_SIZES.product}
             quality={75}
           />
         </div>
