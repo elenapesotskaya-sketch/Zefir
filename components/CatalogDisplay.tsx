@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ChevronDown } from 'lucide-react';
 import { ProductCard } from '@/components/ProductCard';
+import { useCatalog } from '@/hooks/useCatalog';
 
 interface CatalogItem {
   id: string;
@@ -38,62 +39,24 @@ export function CatalogDisplay({
   onToggleSection,
   isEditing = false,
 }: CatalogDisplayProps) {
-  const [dynamicItems, setDynamicItems] = useState<CatalogItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { items: dynamicItems, updateItem } = useCatalog();
 
-  useEffect(() => {
-    loadCatalog();
-  }, []);
-
-  // Reload catalog when exiting edit mode
-  useEffect(() => {
-    if (!isEditing) {
-      loadCatalog();
-    }
-  }, [isEditing]);
-
-  const loadCatalog = async () => {
-    try {
-      const response = await fetch('/api/catalog', {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-        }
-      });
-      const data = await response.json();
-      if (data.items) {
-        setDynamicItems(data.items);
+  // Always use dynamicItems from localStorage as the source of truth
+  const itemsBySection = dynamicItems.reduce(
+    (acc, item) => {
+      if (!acc[item.sectionId]) {
+        acc[item.sectionId] = [];
       }
-    } catch (error) {
-      console.error('Failed to load catalog:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      acc[item.sectionId].push(item);
+      return acc;
+    },
+    {} as Record<string, typeof dynamicItems>
+  );
 
-  const handleSaveItem = async (itemId: string, itemData: any, sectionId?: string) => {
+  const handleSaveItem = (itemId: string, itemData: any) => {
     try {
-      const response = await fetch('/api/catalog', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          password: '1931',
-          action: 'update-item',
-          item: {
-            id: itemId,
-            sectionId: sectionId || itemId,
-            ...itemData,
-          },
-        }),
-      });
-
-      if (response.ok) {
-        // Small delay to ensure backend has written data
-        await new Promise(resolve => setTimeout(resolve, 500));
-        await loadCatalog();
-      } else {
-        throw new Error('Failed to save');
-      }
+      // Update in localStorage immediately
+      updateItem(itemId, itemData);
     } catch (error) {
       console.error('Failed to save item:', error);
       throw error;
@@ -103,11 +66,8 @@ export function CatalogDisplay({
   return (
     <div className="space-y-8">
       {catalogSections.map((section) => {
-        // Get items from database for this section
-        const dbItems = dynamicItems.filter((item) => item.sectionId === section.id);
-        
-        // Use database items if available, otherwise use static items
-        const displayItems = dbItems.length > 0 ? dbItems : section.items;
+        // Get items from cached state (single source of truth)
+        const sectionItems = itemsBySection[section.id] || [];
 
         return (
           <div key={section.id} className="space-y-4">
@@ -128,28 +88,19 @@ export function CatalogDisplay({
 
             {expandedCatalog === section.id && (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-                {displayItems.map((item, idx) => {
-                  const dbItem = dbItems.find((i) => i.name === item.name);
-                  const itemId = dbItem?.id || item.name;
-                  const price = dbItem?.price || 50;
-                  const inStock = dbItem?.inStock !== false;
-                  const imageUrl = dbItem?.imageUrl || item.img;
-                  const description = dbItem?.description || 'Натуральный зефир ручной работы';
-
-                  return (
-                    <ProductCard
-                      key={idx}
-                      id={itemId}
-                      name={item.name}
-                      description={description}
-                      price={price}
-                      inStock={inStock}
-                      imageUrl={imageUrl}
-                      isEditing={isEditing}
-                      onSave={(data) => handleSaveItem(itemId, data, section.id)}
-                    />
-                  );
-                })}
+                {sectionItems.map((item) => (
+                  <ProductCard
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    description={item.description}
+                    price={item.price}
+                    inStock={item.inStock}
+                    imageUrl={item.imageUrl}
+                    isEditing={isEditing}
+                    onSave={(data) => handleSaveItem(item.id, data)}
+                  />
+                ))}
               </div>
             )}
           </div>

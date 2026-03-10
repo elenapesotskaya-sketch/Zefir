@@ -27,6 +27,7 @@ export function PasswordModal({ isOpen, onClose, onSuccess }: PasswordModalProps
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
+        cache: 'no-store',
       });
 
       if (response.ok) {

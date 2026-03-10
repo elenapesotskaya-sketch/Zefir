@@ -1,17 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+export const dynamic = 'force-dynamic';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, Heart, Gift, Sparkles, Flower2, ChevronDown, Edit3 } from 'lucide-react';
 import { PasswordModal } from '@/components/PasswordModal';
 import { CatalogDisplay } from '@/components/CatalogDisplay';
+import { useCatalog } from '@/hooks/useCatalog';
+import { buildCatalogSections } from '@/lib/catalogUtils';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedCatalog, setExpandedCatalog] = useState<string | null>('bouquets');
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const { items: catalogItems } = useCatalog();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -28,52 +33,8 @@ export default function Home() {
     setIsEditing(true);
   };
 
-  const catalogSections = [
-    {
-      id: 'bouquets',
-      title: 'Цветы в букете',
-      description: 'Букеты в нежной упаковке с лентой',
-      items: [
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%91%D1%83%D0%BA%D0%B5%D1%82%20%D1%82%D1%8E%D0%BB%D1%8C%D0%BF%D0%B0%D0%BD%D1%8B-MxylnF6DSfe3oBS85AEuFuoIbDbcQX.png', name: 'Нежные тюльпаны' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%91%D1%83%D0%BA%D0%B5%D1%82%20%D1%82%D1%8E%D0%BB%D1%8C%D0%BF%D0%B0%D0%BD%D1%8B%20big-zxSPae5F1NFzXJ2uOhTXMH6Lu34fDe.png', name: 'Большой букет тюльпанов' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bouquet_1-t5Uj1hczAL8Kd3R0hV77R1cPugl0QP.png', name: 'Пионы нежные' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%91%D1%83%D0%BA%D0%B5%D1%82%20%D1%82%D1%8E%D0%BB%D1%8C%D0%BF%D0%B0%D0%BD%D1%8B-Z98LNlhM4SLcIMYVzwaUX1fbT1jwpq.jpeg', name: 'Букет тюльпанов мятные' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D1%82%D1%8E%D0%BB%D1%8C%D0%BF%D0%B0%D0%BD%D1%8B%20%D0%BD%D0%B5%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D1%8C-CjDAfjN3KjMAgChuN1ja7SnAnnr0M3.jpeg', name: 'Нежность розовая' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-L66ka4nnCqFF0qGd3lm6BVx6q8690M.png', name: 'Букет розовой мечты' },
-      ]
-    },
-    {
-      id: 'boxes',
-      title: 'Цветы в коробке',
-      description: 'Круглые и квадратные коробочки для особых подарков',
-      items: [
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%9A%D0%BE%D1%80%D0%BE%D0%B1%D0%BA%D0%B0%201-n46I8yOHyDtjMCSn2HKGad8BmiO4ia.png', name: 'Коробка розовых пионов' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%9A%D0%BE%D1%80%D0%BE%D0%B1%D0%BA%D0%B0%202-10vUJcg5J9KDxiD6nNPK8d13aD3Gat.png', name: 'Коробка микс цветов' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%9A%D0%BE%D1%80%D0%BE%D0%B1%D0%BA%D0%B0%203-11ShGHkf5geX1KVAIBbdfujF3HK3PI.png', name: 'Коробка нежных пионов' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bouquet_2-wRt1lVgCTbxMghp1AD0R90XQnB6n1N.png', name: 'Премиум коробка' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bouquet_10-bZ4oEQAb01JQi4yazSAUsQG66WfXZS.png', name: 'Коробка с окошком' },
-      ]
-    },
-    {
-      id: 'baskets',
-      title: 'Цветы в корзинке-сумочке',
-      description: 'Удобные корзинки-сумочки для легкого переноски и красивого вручения подарка',
-      items: [
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-KCBkbQPT9HvEYGYx9Eofgmus4uAbhS.png', name: 'Корзинка с пестрыми пионами' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-tn0x0ebIaTFxBo171vI3CchR5iR9ID.png', name: 'Корзинка с фиолетовыми тюльпанами' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-gFj2mYK3yAfEyPKzw8EFqclymQksWj.png', name: 'Розовая сумочка с букетом' },
-      ]
-    },
-    {
-      id: 'sets',
-      title: 'Наборы цветов',
-      description: 'Создавайте шедевры из своей домашней выпечки! Вы можете самостоятельно составить красивую композицию, используя наши наборы цветов из натурального зефира. Украсьте торты, капкейки и десерты волшебными цветами, которые удивят и порадуют ваших близких.',
-      items: [
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-AkTgCBLkxBqcFhtzZKG0Dazyb9RbMO.png', name: 'Набор фиолетовых тюльпанов' },
-        { img: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-FyH9UsEDdPPzuMEwAxvfqCYyiKLmmF.png', name: 'Набор пастельных цветов' },
-      ]
-    }
-  ];
+  // Build catalog sections from localStorage items
+  const catalogSections = buildCatalogSections(catalogItems);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -657,7 +618,7 @@ export default function Home() {
             </div>
             <div className="mt-8 pt-8 border-t border-border text-center">
               <p className="text-muted-foreground">
-                Хотите особый букет? Мы создаём индивидуальные композиции по вашим пожеланиям!
+                Хотите особый букет? Мы создаём индивидуальные композиции по ваш��м пожеланиям!
               </p>
             </div>
           </div>
