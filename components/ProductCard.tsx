@@ -111,6 +111,9 @@ export function ProductCard({
             alt={name}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-300"
+            loading="lazy"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            quality={75}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
@@ -144,6 +147,9 @@ export function ProductCard({
             alt={editData.name}
             fill
             className="object-cover"
+            loading="lazy"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            quality={75}
           />
         </div>
         <label className="absolute bottom-2 right-2 cursor-pointer">
