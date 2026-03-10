@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ChevronDown } from 'lucide-react';
 import { ProductCard } from '@/components/ProductCard';
+import { useCatalog } from '@/hooks/useCatalog';
 
 interface CatalogItem {
   id: string;
@@ -38,62 +39,12 @@ export function CatalogDisplay({
   onToggleSection,
   isEditing = false,
 }: CatalogDisplayProps) {
-  const [dynamicItems, setDynamicItems] = useState<CatalogItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { items: dynamicItems, isLoading, updateItem } = useCatalog();
 
-  useEffect(() => {
-    loadCatalog();
-  }, []);
-
-  // Reload catalog when exiting edit mode
-  useEffect(() => {
-    if (!isEditing) {
-      loadCatalog();
-    }
-  }, [isEditing]);
-
-  const loadCatalog = async () => {
+  const handleSaveItem = (itemId: string, itemData: any) => {
     try {
-      const response = await fetch('/api/catalog', {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-        }
-      });
-      const data = await response.json();
-      if (data.items) {
-        setDynamicItems(data.items);
-      }
-    } catch (error) {
-      console.error('Failed to load catalog:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSaveItem = async (itemId: string, itemData: any, sectionId?: string) => {
-    try {
-      const response = await fetch('/api/catalog', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          password: '1931',
-          action: 'update-item',
-          item: {
-            id: itemId,
-            sectionId: sectionId || itemId,
-            ...itemData,
-          },
-        }),
-      });
-
-      if (response.ok) {
-        // Small delay to ensure backend has written data
-        await new Promise(resolve => setTimeout(resolve, 500));
-        await loadCatalog();
-      } else {
-        throw new Error('Failed to save');
-      }
+      // Update in localStorage immediately
+      updateItem(itemId, itemData);
     } catch (error) {
       console.error('Failed to save item:', error);
       throw error;
@@ -146,7 +97,7 @@ export function CatalogDisplay({
                       inStock={inStock}
                       imageUrl={imageUrl}
                       isEditing={isEditing}
-                      onSave={(data) => handleSaveItem(itemId, data, section.id)}
+                      onSave={(data) => handleSaveItem(itemId, data)}
                     />
                   );
                 })}
