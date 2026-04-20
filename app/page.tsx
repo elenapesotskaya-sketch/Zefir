@@ -5,10 +5,12 @@ export const dynamic = 'force-dynamic';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Heart, Gift, Sparkles, Flower2, ChevronDown, Edit3 } from 'lucide-react';
+import { Menu, X, Heart, Gift, Sparkles, Flower2, ChevronDown, Edit3, ShoppingCart } from 'lucide-react';
 import { PasswordModal } from '@/components/PasswordModal';
 import { CatalogDisplay } from '@/components/CatalogDisplay';
+import { CartModal } from '@/components/CartModal';
 import { useCatalog } from '@/hooks/useCatalog';
+import { useCart } from '@/hooks/useCart';
 import { buildCatalogSections } from '@/lib/catalogUtils';
 
 export default function Home() {
@@ -16,7 +18,9 @@ export default function Home() {
   const [expandedCatalog, setExpandedCatalog] = useState<string | null>('bouquets');
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const { items: catalogItems } = useCatalog();
+  const { getItemCount } = useCart();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -83,19 +87,50 @@ export default function Home() {
               >
                 Контакты
               </button>
+
+              {/* Cart Icon */}
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 hover:bg-accent rounded-lg transition-colors"
+                title="Корзина"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {getItemCount() > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
+                    {getItemCount()}
+                  </span>
+                )}
+              </button>
             </nav>
 
             {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+            <div className="md:hidden flex items-center gap-2">
+              {/* Cart Icon Mobile */}
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 hover:bg-accent rounded-lg transition-colors"
+                title="Корзина"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {getItemCount() > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
+                    {getItemCount()}
+                  </span>
+                )}
+              </button>
+
+              {/* Menu Button */}
+              <button
+                className="p-2"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Mobile Menu */}
@@ -770,6 +805,11 @@ export default function Home() {
         isOpen={isPasswordModalOpen}
         onClose={() => setIsPasswordModalOpen(false)}
         onSuccess={handlePasswordSuccess}
+      />
+
+      <CartModal
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
       />
     </div>
   );

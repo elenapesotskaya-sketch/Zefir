@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Upload, Loader2 } from 'lucide-react';
+import { Upload, Loader2, ShoppingCart } from 'lucide-react';
 import { OptimizedImage } from '@/components/OptimizedImage';
 import { getValidImageUrl, RESPONSIVE_SIZES } from '@/lib/imageUtils';
+import { useCart } from '@/hooks/useCart';
 
 interface ProductCardProps {
   id: string;
@@ -43,6 +44,8 @@ export function ProductCard({
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
+  const { addItem } = useCart();
 
   // Sync props to local state when props change (after save)
   useEffect(() => {
@@ -103,6 +106,14 @@ export function ProductCard({
     }
   };
 
+  const handleAddToCart = () => {
+    if (inStock) {
+      addItem(id, name, price);
+      setAddedToCart(true);
+      setTimeout(() => setAddedToCart(false), 2000);
+    }
+  };
+
   if (!isEditing) {
     // View mode
     return (
@@ -121,10 +132,13 @@ export function ProductCard({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
-        <div className="p-6">
-          <h5 className="font-semibold text-lg">{name}</h5>
-          <p className="text-sm text-muted-foreground mt-2">{description}</p>
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/50">
+        <div className="p-6 space-y-4">
+          <div>
+            <h5 className="font-semibold text-lg">{name}</h5>
+            <p className="text-sm text-muted-foreground mt-2">{description}</p>
+          </div>
+          
+          <div className="flex items-center justify-between pt-4 border-t border-border/50">
             <span className="font-semibold text-lg">{price} EUR</span>
             {inStock ? (
               <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
@@ -136,6 +150,20 @@ export function ProductCard({
               </span>
             )}
           </div>
+
+          {inStock && (
+            <button
+              onClick={handleAddToCart}
+              className={`w-full py-2 px-4 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
+                addedToCart
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-primary text-primary-foreground hover:shadow-lg'
+              }`}
+            >
+              <ShoppingCart className="w-4 h-4" />
+              {addedToCart ? 'Добавлено в корзину' : 'Добавить в корзину'}
+            </button>
+          )}
         </div>
       </div>
     );
