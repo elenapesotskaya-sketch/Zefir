@@ -8,6 +8,7 @@ export interface CatalogItem {
   price: number;
   inStock: boolean;
   imageUrl: string;
+  imageUrl2?: string;
 }
 
 interface CatalogData {
@@ -16,6 +17,7 @@ interface CatalogData {
 }
 
 const STORAGE_KEY = 'catalog-data';
+const CATALOG_VERSION = '2.1'; // Increment when catalog structure changes
 
 // Default catalog items from init-catalog.js
 const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
@@ -91,7 +93,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%9A%D0%BE%D1%80%D0%BE%D0%B1%D0%BA%D0%B0%202-YlLPbVJCPFZA2mMzGVv1xeWUVFqgKF.png',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/K1-EFK2Oon4KHo8gyNo5clbBOQMboH9vP.jpg',
   },
   {
     id: 'box-3',
@@ -100,7 +102,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%BA%D0%BE%D1%80%D0%BE%D0%B1%D0%BA%D0%B0%203-e1nWRULKVxOhWX0yPZ8R2QQvTZHvHl.png',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/K2-p9cPDsgaLPUVAFoSm3GkTSyp38f3kf.jpg',
   },
   // Baskets
   {
@@ -138,7 +140,8 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-gfq1xmMKOLkGVFzHrvpKfLjlZLMqBk.png',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/N21-2AE2myFDAwxsklFhkDNo9Z8lLT5okE.jpg',
+    imageUrl2: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/N22-stSG5CSgu2Uwv0PXQIHrA7So4BhdBY.jpg',
   },
   {
     id: 'set-2',
@@ -194,11 +197,14 @@ export function useCatalog() {
       if (typeof window === 'undefined') return;
 
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
+      const versionStored = localStorage.getItem(STORAGE_KEY + '_version');
+      
+      // If version mismatch or no stored data, use defaults
+      if (stored && versionStored === CATALOG_VERSION) {
         const data: CatalogData = JSON.parse(stored);
         setItems(data.items);
       } else {
-        // First time - use default and save to localStorage
+        // Version mismatch or first time - use default and save to localStorage
         localStorage.setItem(
           STORAGE_KEY,
           JSON.stringify({
@@ -206,6 +212,7 @@ export function useCatalog() {
             lastUpdated: new Date().toISOString(),
           })
         );
+        localStorage.setItem(STORAGE_KEY + '_version', CATALOG_VERSION);
         setItems(DEFAULT_CATALOG_ITEMS);
       }
     } catch (error) {
@@ -230,6 +237,7 @@ export function useCatalog() {
             lastUpdated: new Date().toISOString(),
           })
         );
+        localStorage.setItem(STORAGE_KEY + '_version', CATALOG_VERSION);
         return updated;
       });
     } catch (error) {
@@ -246,6 +254,7 @@ export function useCatalog() {
           lastUpdated: new Date().toISOString(),
         })
       );
+      localStorage.setItem(STORAGE_KEY + '_version', CATALOG_VERSION);
       setItems(DEFAULT_CATALOG_ITEMS);
     } catch (error) {
       console.error('[v0] Error resetting catalog:', error);

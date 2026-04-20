@@ -5,10 +5,13 @@ export const dynamic = 'force-dynamic';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Heart, Gift, Sparkles, Flower2, ChevronDown, Edit3 } from 'lucide-react';
+import { Menu, X, Heart, Gift, Sparkles, Flower2, ChevronDown, Edit3, ShoppingCart } from 'lucide-react';
 import { PasswordModal } from '@/components/PasswordModal';
 import { CatalogDisplay } from '@/components/CatalogDisplay';
+import { ProductCard } from '@/components/ProductCard';
+import { CartModal } from '@/components/CartModal';
 import { useCatalog } from '@/hooks/useCatalog';
+import { useCart } from '@/context/CartContext';
 import { buildCatalogSections } from '@/lib/catalogUtils';
 
 export default function Home() {
@@ -16,7 +19,9 @@ export default function Home() {
   const [expandedCatalog, setExpandedCatalog] = useState<string | null>('bouquets');
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const { items: catalogItems } = useCatalog();
+  const { getItemCount } = useCart();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -83,19 +88,50 @@ export default function Home() {
               >
                 Контакты
               </button>
+
+              {/* Cart Icon */}
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 hover:bg-accent rounded-lg transition-colors"
+                title="Корзина"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {getItemCount() > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
+                    {getItemCount()}
+                  </span>
+                )}
+              </button>
             </nav>
 
             {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+            <div className="md:hidden flex items-center gap-2">
+              {/* Cart Icon Mobile */}
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 hover:bg-accent rounded-lg transition-colors"
+                title="Корзина"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {getItemCount() > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
+                    {getItemCount()}
+                  </span>
+                )}
+              </button>
+
+              {/* Menu Button */}
+              <button
+                className="p-2"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Mobile Menu */}
@@ -393,71 +429,38 @@ export default function Home() {
             <h4 className="text-2xl font-bold text-center mb-8 text-primary">Комплименты</h4>
             <p className="text-center text-muted-foreground mb-8">Маленькие порции для приятных мелочей</p>
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-lg transition-all group">
-                <div className="h-56 relative overflow-hidden bg-gradient-to-br from-primary/10 to-accent/10">
-                  <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-gSRW40vEgm3wcXCWRK2mzfiIKtOmgs.png"
-                    alt="Набор из 5 капкейков с цветами из зефира"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <div className="p-4">
-                  <p className="font-semibold text-sm">Набор из 5 капкейков</p>
-                  <p className="text-xs text-muted-foreground">Разные цвета</p>
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
-                    <span className="font-semibold text-sm">50 EUR</span>
-                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
-                      ✓ В наличии
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <ProductCard
+                id="compliment-5-cupcakes"
+                name="Набор из 5 капкейков"
+                description="Разные цвета, натуральный зефир ручной работы"
+                price={50}
+                inStock={true}
+                imageUrl="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-gSRW40vEgm3wcXCWRK2mzfiIKtOmgs.png"
+                isEditing={isEditing}
+                onSave={async () => {}}
+              />
 
-              <div className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-lg transition-all group">
-                <div className="h-56 relative overflow-hidden bg-gradient-to-br from-primary/10 to-accent/10">
-                  <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-hJYMWBBCJuvSSBX8zDDx34fDmBNnEj.png"
-                    alt="Один капкейк с розовым тюльпаном"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <div className="p-4">
-                  <p className="font-semibold text-sm">Один капкейк</p>
-                  <p className="text-xs text-muted-foreground">С розовым тюльпаном</p>
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
-                    <span className="font-semibold text-sm">50 EUR</span>
-                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
-                      ✓ В наличии
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <ProductCard
+                id="compliment-1-cupcake"
+                name="Один капкейк"
+                description="С розовым тюльпаном, натуральный зефир"
+                price={50}
+                inStock={true}
+                imageUrl="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-hJYMWBBCJuvSSBX8zDDx34fDmBNnEj.png"
+                isEditing={isEditing}
+                onSave={async () => {}}
+              />
 
-              <div className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-lg transition-all group">
-                <div className="h-56 relative overflow-hidden bg-gradient-to-br from-primary/10 to-accent/10">
-                  <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-f1g3Pae7jkJNEcxDdW5G10Nr6dQpTK.png"
-                    alt="Три капкейка с фиолетовыми тюльпанами"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <div className="p-4">
-                  <p className="font-semibold text-sm">Три капкейка</p>
-                  <p className="text-xs text-muted-foreground">С фиолетовыми тюльпанами</p>
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
-                    <span className="font-semibold text-sm">50 EUR</span>
-                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
-                      ✓ В наличии
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <ProductCard
+                id="compliment-3-cupcakes"
+                name="Три капкейка"
+                description="С фиолетовыми тюльпанами, натуральный зефир"
+                price={50}
+                inStock={true}
+                imageUrl="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-f1g3Pae7jkJNEcxDdW5G10Nr6dQpTK.png"
+                isEditing={isEditing}
+                onSave={async () => {}}
+              />
             </div>
           </div>
 
@@ -618,7 +621,7 @@ export default function Home() {
             </div>
             <div className="mt-8 pt-8 border-t border-border text-center">
               <p className="text-muted-foreground">
-                Хотите особый букет? Мы создаём индивидуальные композиции по ваш��м пожеланиям!
+                Хотите особый букет? Мы создаём индивидуальные композиции по вашим пожеланиям!
               </p>
             </div>
           </div>
@@ -770,6 +773,11 @@ export default function Home() {
         isOpen={isPasswordModalOpen}
         onClose={() => setIsPasswordModalOpen(false)}
         onSuccess={handlePasswordSuccess}
+      />
+
+      <CartModal
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
       />
     </div>
   );

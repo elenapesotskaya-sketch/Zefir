@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Upload, Loader2 } from 'lucide-react';
+import { Upload, Loader2, ShoppingCart } from 'lucide-react';
 import { OptimizedImage } from '@/components/OptimizedImage';
 import { getValidImageUrl, RESPONSIVE_SIZES } from '@/lib/imageUtils';
+import { useCart } from '@/context/CartContext';
 
 interface ProductCardProps {
   id: string;
@@ -13,6 +14,7 @@ interface ProductCardProps {
   price: number;
   inStock: boolean;
   imageUrl: string;
+  imageUrl2?: string;
   isEditing: boolean;
   onSave: (data: {
     name: string;
@@ -30,6 +32,7 @@ export function ProductCard({
   price,
   inStock,
   imageUrl,
+  imageUrl2,
   isEditing,
   onSave,
 }: ProductCardProps) {
@@ -43,6 +46,17 @@ export function ProductCard({
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [showSecondImage, setShowSecondImage] = useState(false);
+  const { addItem, items: cartItems } = useCart();
+  
+  // Check if this product is in the cart
+  const cartItem = cartItems.find((item) => item.id === id);
+  const isInCart = !!cartItem;
+  const cartQuantity = cartItem?.quantity || 0;
+  
+  // Handle dual images
+  const currentImageUrl = showSecondImage && imageUrl2 ? imageUrl2 : imageUrl;
+  const hasDualImages = !!imageUrl2;
 
   // Sync props to local state when props change (after save)
   useEffect(() => {
@@ -103,13 +117,19 @@ export function ProductCard({
     }
   };
 
+  const handleAddToCart = () => {
+    if (inStock) {
+      addItem(id, name, price);
+    }
+  };
+
   if (!isEditing) {
     // View mode
     return (
       <div className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all hover:border-primary/40 group">
-        <div className="h-64 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
+        <div className="h-64 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background group/image">
           <OptimizedImage
-            src={imageUrl}
+            src={currentImageUrl}
             alt={name}
             width={500}
             height={500}
@@ -120,11 +140,25 @@ export function ProductCard({
             quality={75}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          
+          {/* Image toggle button for dual images */}
+          {hasDualImages && (
+            <button
+              onClick={() => setShowSecondImage(!showSecondImage)}
+              className="absolute bottom-2 right-2 bg-primary text-primary-foreground px-3 py-1 rounded-lg text-xs font-semibold opacity-0 group-hover/image:opacity-100 transition-opacity"
+              title={showSecondImage ? 'Первое изображение' : 'Второе изображение'}
+            >
+              {showSecondImage ? '1' : '2'}
+            </button>
+          )}
         </div>
-        <div className="p-6">
-          <h5 className="font-semibold text-lg">{name}</h5>
-          <p className="text-sm text-muted-foreground mt-2">{description}</p>
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/50">
+        <div className="p-6 space-y-4">
+          <div>
+            <h5 className="font-semibold text-lg">{name}</h5>
+            <p className="text-sm text-muted-foreground mt-2">{description}</p>
+          </div>
+          
+          <div className="flex items-center justify-between pt-4 border-t border-border/50">
             <span className="font-semibold text-lg">{price} EUR</span>
             {inStock ? (
               <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
@@ -136,6 +170,20 @@ export function ProductCard({
               </span>
             )}
           </div>
+
+          {inStock && (
+            <button
+              onClick={handleAddToCart}
+              className={`w-full py-2 px-4 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
+                isInCart
+                  ? 'bg-green-100 text-green-700 hover:shadow-lg'
+                  : 'bg-primary text-primary-foreground hover:shadow-lg'
+              }`}
+            >
+              <ShoppingCart className="w-4 h-4" />
+              {isInCart ? `В корзине (${cartQuantity})` : 'Добавить в корзину'}
+            </button>
+          )}
         </div>
       </div>
     );
