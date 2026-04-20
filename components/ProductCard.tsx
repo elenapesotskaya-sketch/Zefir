@@ -14,6 +14,7 @@ interface ProductCardProps {
   price: number;
   inStock: boolean;
   imageUrl: string;
+  imageUrl2?: string;
   isEditing: boolean;
   onSave: (data: {
     name: string;
@@ -31,6 +32,7 @@ export function ProductCard({
   price,
   inStock,
   imageUrl,
+  imageUrl2,
   isEditing,
   onSave,
 }: ProductCardProps) {
@@ -44,12 +46,17 @@ export function ProductCard({
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [showSecondImage, setShowSecondImage] = useState(false);
   const { addItem, items: cartItems } = useCart();
   
   // Check if this product is in the cart
   const cartItem = cartItems.find((item) => item.id === id);
   const isInCart = !!cartItem;
   const cartQuantity = cartItem?.quantity || 0;
+  
+  // Handle dual images
+  const currentImageUrl = showSecondImage && imageUrl2 ? imageUrl2 : imageUrl;
+  const hasDualImages = !!imageUrl2;
 
   // Sync props to local state when props change (after save)
   useEffect(() => {
@@ -120,9 +127,9 @@ export function ProductCard({
     // View mode
     return (
       <div className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all hover:border-primary/40 group">
-        <div className="h-64 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
+        <div className="h-64 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background group/image">
           <OptimizedImage
-            src={imageUrl}
+            src={currentImageUrl}
             alt={name}
             width={500}
             height={500}
@@ -133,6 +140,17 @@ export function ProductCard({
             quality={75}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          
+          {/* Image toggle button for dual images */}
+          {hasDualImages && (
+            <button
+              onClick={() => setShowSecondImage(!showSecondImage)}
+              className="absolute bottom-2 right-2 bg-primary text-primary-foreground px-3 py-1 rounded-lg text-xs font-semibold opacity-0 group-hover/image:opacity-100 transition-opacity"
+              title={showSecondImage ? 'Первое изображение' : 'Второе изображение'}
+            >
+              {showSecondImage ? '1' : '2'}
+            </button>
+          )}
         </div>
         <div className="p-6 space-y-4">
           <div>

@@ -97,6 +97,7 @@ export function CatalogDisplay({
                     price={item.price}
                     inStock={item.inStock}
                     imageUrl={item.imageUrl}
+                    imageUrl2={item.imageUrl2}
                     isEditing={isEditing}
                     onSave={(data) => handleSaveItem(item.id, data)}
                   />
