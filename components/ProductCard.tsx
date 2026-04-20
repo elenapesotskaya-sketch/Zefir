@@ -44,8 +44,12 @@ export function ProductCard({
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-  const [addedToCart, setAddedToCart] = useState(false);
-  const { addItem } = useCart();
+  const { addItem, items: cartItems } = useCart();
+  
+  // Check if this product is in the cart
+  const cartItem = cartItems.find((item) => item.id === id);
+  const isInCart = !!cartItem;
+  const cartQuantity = cartItem?.quantity || 0;
 
   // Sync props to local state when props change (after save)
   useEffect(() => {
@@ -109,8 +113,6 @@ export function ProductCard({
   const handleAddToCart = () => {
     if (inStock) {
       addItem(id, name, price);
-      setAddedToCart(true);
-      setTimeout(() => setAddedToCart(false), 2000);
     }
   };
 
@@ -155,13 +157,13 @@ export function ProductCard({
             <button
               onClick={handleAddToCart}
               className={`w-full py-2 px-4 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
-                addedToCart
-                  ? 'bg-green-100 text-green-700'
+                isInCart
+                  ? 'bg-green-100 text-green-700 hover:shadow-lg'
                   : 'bg-primary text-primary-foreground hover:shadow-lg'
               }`}
             >
               <ShoppingCart className="w-4 h-4" />
-              {addedToCart ? 'Добавлено в корзину' : 'Добавить в корзину'}
+              {isInCart ? `В корзине (${cartQuantity})` : 'Добавить в корзину'}
             </button>
           )}
         </div>
