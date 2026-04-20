@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Upload, Loader2, ShoppingCart } from 'lucide-react';
 import { OptimizedImage } from '@/components/OptimizedImage';
 import { getValidImageUrl, RESPONSIVE_SIZES } from '@/lib/imageUtils';
-import { useCart } from '@/hooks/useCart';
+import { useCart } from '@/context/CartContext';
 
 interface ProductCardProps {
   id: string;

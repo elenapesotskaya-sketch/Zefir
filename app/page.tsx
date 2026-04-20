@@ -10,7 +10,7 @@ import { PasswordModal } from '@/components/PasswordModal';
 import { CatalogDisplay } from '@/components/CatalogDisplay';
 import { CartModal } from '@/components/CartModal';
 import { useCatalog } from '@/hooks/useCatalog';
-import { useCart } from '@/hooks/useCart';
+import { useCart } from '@/context/CartContext';
 import { buildCatalogSections } from '@/lib/catalogUtils';
 
 export default function Home() {
@@ -574,12 +574,12 @@ export default function Home() {
             <div>
               <h4 className="text-2xl font-semibold mb-4 text-primary">Как создаются зефирные цветы</h4>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                Каждый букет — это шедевр ручной работы. Мы используем только свежее натуральное пюре из фруктов и ягод, которое готовится непосредственно перед началом работы.
+                Каждый букет — это шедевр ручной работы. Мы используем только свежее натурал��ное пюре из фруктов и ягод, которое готовится непосредственно перед началом работы.
               </p>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <span className="text-primary font-bold">1.</span>
-                  <span className="text-muted-foreground">Готовим свежее пюре из яблок и ягод</span>
+                  <span className="text-muted-foreground">��отовим свежее пюре из яблок и ягод</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-primary font-bold">2.</span>

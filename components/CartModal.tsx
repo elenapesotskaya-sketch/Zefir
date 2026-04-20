@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { X, Plus, Minus, Loader2 } from 'lucide-react';
-import { CartItem, useCart } from '@/hooks/useCart';
+import { useCart, CartItem } from '@/context/CartContext';
 
 interface CartModalProps {
   isOpen: boolean;
