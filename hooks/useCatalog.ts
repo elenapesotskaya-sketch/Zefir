@@ -17,7 +17,7 @@ interface CatalogData {
 }
 
 const STORAGE_KEY = 'catalog-data';
-const CATALOG_VERSION = '2.0'; // Increment when catalog structure changes
+const CATALOG_VERSION = '2.1'; // Increment when catalog structure changes
 
 // Default catalog items from init-catalog.js
 const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
@@ -140,8 +140,8 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/N21-2KWlonsRpfWerRtlX6YZJIFW2lvCJ7.jpg',
-    imageUrl2: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/N22-yCFJCRqd5yrz5ZkSOMMzLaDOtvCRDM.jpg',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/N21-2AE2myFDAwxsklFhkDNo9Z8lLT5okE.jpg',
+    imageUrl2: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/N22-stSG5CSgu2Uwv0PXQIHrA7So4BhdBY.jpg',
   },
   {
     id: 'set-2',

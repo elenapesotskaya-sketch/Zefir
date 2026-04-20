@@ -356,7 +356,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg mb-2">Букеты разных размеров</h4>
-                  <p className="text-muted-foreground text-sm">От небольшого символического подар��а до шикарной композиции для особых случаев</p>
+                  <p className="text-muted-foreground text-sm">От небольшого символического подарка до шикарной композиции для особых случаев</p>
                 </div>
               </div>
             </div>
