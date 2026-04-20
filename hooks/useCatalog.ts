@@ -17,6 +17,7 @@ interface CatalogData {
 }
 
 const STORAGE_KEY = 'catalog-data';
+const CATALOG_VERSION = '2.0'; // Increment when catalog structure changes
 
 // Default catalog items from init-catalog.js
 const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
@@ -196,11 +197,14 @@ export function useCatalog() {
       if (typeof window === 'undefined') return;
 
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
+      const versionStored = localStorage.getItem(STORAGE_KEY + '_version');
+      
+      // If version mismatch or no stored data, use defaults
+      if (stored && versionStored === CATALOG_VERSION) {
         const data: CatalogData = JSON.parse(stored);
         setItems(data.items);
       } else {
-        // First time - use default and save to localStorage
+        // Version mismatch or first time - use default and save to localStorage
         localStorage.setItem(
           STORAGE_KEY,
           JSON.stringify({
@@ -208,6 +212,7 @@ export function useCatalog() {
             lastUpdated: new Date().toISOString(),
           })
         );
+        localStorage.setItem(STORAGE_KEY + '_version', CATALOG_VERSION);
         setItems(DEFAULT_CATALOG_ITEMS);
       }
     } catch (error) {
@@ -232,6 +237,7 @@ export function useCatalog() {
             lastUpdated: new Date().toISOString(),
           })
         );
+        localStorage.setItem(STORAGE_KEY + '_version', CATALOG_VERSION);
         return updated;
       });
     } catch (error) {
@@ -248,6 +254,7 @@ export function useCatalog() {
           lastUpdated: new Date().toISOString(),
         })
       );
+      localStorage.setItem(STORAGE_KEY + '_version', CATALOG_VERSION);
       setItems(DEFAULT_CATALOG_ITEMS);
     } catch (error) {
       console.error('[v0] Error resetting catalog:', error);
