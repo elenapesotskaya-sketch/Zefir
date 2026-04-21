@@ -9,6 +9,7 @@ export interface CatalogItem {
   inStock: boolean;
   imageUrl: string;
   imageUrl2?: string;
+  displayMode?: 'cover' | 'contain'; // 'cover' crops to fill, 'contain' shows full image
 }
 
 interface CatalogData {
@@ -17,7 +18,7 @@ interface CatalogData {
 }
 
 const STORAGE_KEY = 'catalog-data';
-const CATALOG_VERSION = '2.1'; // Increment when catalog structure changes
+const CATALOG_VERSION = '2.4'; // Increment when catalog structure changes
 
 // Default catalog items from init-catalog.js
 const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
@@ -30,6 +31,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%91%D1%83%D0%BA%D0%B5%D1%82%20%D1%82%D1%8E%D0%BB%D1%8C%D0%BF%D0%B0%D0%BD%D1%8B-MxylnF6DSfe3oBS85AEuFuoIbDbcQX.png',
+    displayMode: 'contain',
   },
   {
     id: 'bouquet-2',
@@ -39,6 +41,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%91%D1%83%D0%BA%D0%B5%D1%82%20%D1%82%D1%8E%D0%BB%D1%8C%D0%BF%D0%B0%D0%BD%D1%8B%20big-zxSPae5F1NFzXJ2uOhTXMH6Lu34fDe.png',
+    displayMode: 'contain',
   },
   {
     id: 'bouquet-3',
@@ -48,6 +51,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bouquet_1-t5Uj1hczAL8Kd3R0hV77R1cPugl0QP.png',
+    displayMode: 'contain',
   },
   {
     id: 'bouquet-4',
@@ -57,6 +61,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%91%D1%83%D0%BA%D0%B5%D1%82%20%D1%82%D1%8E%D0%BB%D1%8C%D0%BF%D0%B0%D0%BD%D1%8B-Z98LNlhM4SLcIMYVzwaUX1fbT1jwpq.jpeg',
+    displayMode: 'contain',
   },
   {
     id: 'bouquet-5',
@@ -66,6 +71,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D1%82%D1%8E%D0%BB%D1%8C%D0%BF%D0%B0%D0%BD%D1%8B%20%D0%BD%D0%B5%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D1%8C-CjDAfjN3KjMAgChuN1ja7SnAnnr0M3.jpeg',
+    displayMode: 'contain',
   },
   {
     id: 'bouquet-6',
@@ -75,6 +81,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-L66ka4nnCqFF0qGd3lm6BVx6q8690M.png',
+    displayMode: 'contain',
   },
   // Boxes
   {
@@ -85,6 +92,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%9A%D0%BE%D1%80%D0%BE%D0%B1%D0%BA%D0%B0%201-n46I8yOHyDtjMCSn2HKGad8BmiO4ia.png',
+    displayMode: 'contain',
   },
   {
     id: 'box-2',
@@ -94,6 +102,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/K1-EFK2Oon4KHo8gyNo5clbBOQMboH9vP.jpg',
+    displayMode: 'contain',
   },
   {
     id: 'box-3',
@@ -102,7 +111,8 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/K2-p9cPDsgaLPUVAFoSm3GkTSyp38f3kf.jpg',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-6EiweiCFtGziSI0hC5k5QEPAb2kKvD.png',
+    displayMode: 'contain',
   },
   // Baskets
   {
@@ -112,7 +122,8 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%BA%D0%B0%201-LEbNXhHKKvVUlPc6aNzGnfnvF2ViXd.png',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kor1-MsZDxEAlXLnlhvQpARQYbErwZZIXYY.png',
+    displayMode: 'contain',
   },
   {
     id: 'basket-2',
@@ -121,7 +132,8 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%BA%D0%B0%202-2P4p3m0PvCuKHjCYnhHSXZM2Q3nxAE.png',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kor45-RI91JNpdz7g6H19BGTUz2WL4vvSVsu.png',
+    displayMode: 'contain',
   },
   {
     id: 'basket-3',
@@ -130,7 +142,8 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%BA%D0%B0%203-hPvnGYl8oClnE2eBmTGHpAv2Z1hVWW.png',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kor321-D3XxbQhaZvTGox6B6UIqgS2LfUNybY.png',
+    displayMode: 'contain',
   },
   // Sets
   {
@@ -140,8 +153,8 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/N21-2AE2myFDAwxsklFhkDNo9Z8lLT5okE.jpg',
-    imageUrl2: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/N22-stSG5CSgu2Uwv0PXQIHrA7So4BhdBY.jpg',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/A123-FI3Tc1d9KfdpL0hhiqnj2iKJT0lpbZ.png',
+    displayMode: 'contain',
   },
   {
     id: 'set-2',
@@ -151,6 +164,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-FyH9UsEDdPPzuMEwAxvfqCYyiKLmmF.png',
+    displayMode: 'contain',
   },
   // Compliments
   {
@@ -161,6 +175,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-gSRW40vEgm3wcXCWRK2mzfiIKtOmgs.png',
+    displayMode: 'contain',
   },
   {
     id: 'compliment-2',
@@ -170,6 +185,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-hJYMWBBCJuvSSBX8zDDx34fDmBNnEj.png',
+    displayMode: 'contain',
   },
   {
     id: 'compliment-3',
@@ -179,6 +195,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-f1g3Pae7jkJNEcxDdW5G10Nr6dQpTK.png',
+    displayMode: 'contain',
   },
 ];
 

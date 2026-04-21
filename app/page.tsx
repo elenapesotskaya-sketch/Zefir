@@ -470,7 +470,7 @@ export default function Home() {
             <p className="text-center text-muted-foreground mb-8">Открытки, поздравления и украшения для особых подарков</p>
             <div className="grid md:grid-cols-4 gap-6">
               <div className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-lg transition-all group">
-                <div className="h-72 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
+                <div className="h-48 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background">
                   <Image
                     src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-s2d8RguGm7tHFoWLu3LGBGhHhGBMVm.png"
                     alt="Букет с поздравительной открыткой"
