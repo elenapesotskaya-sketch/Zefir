@@ -9,6 +9,7 @@ export interface CatalogItem {
   inStock: boolean;
   imageUrl: string;
   imageUrl2?: string;
+  displayMode?: 'cover' | 'contain'; // 'cover' crops to fill, 'contain' shows full image
 }
 
 interface CatalogData {
@@ -17,7 +18,7 @@ interface CatalogData {
 }
 
 const STORAGE_KEY = 'catalog-data';
-const CATALOG_VERSION = '2.2'; // Increment when catalog structure changes
+const CATALOG_VERSION = '2.3'; // Increment when catalog structure changes
 
 // Default catalog items from init-catalog.js
 const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
@@ -102,7 +103,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/K2-p9cPDsgaLPUVAFoSm3GkTSyp38f3kf.jpg',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-6EiweiCFtGziSI0hC5k5QEPAb2kKvD.png',
   },
   // Baskets
   {
@@ -113,6 +114,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kor1-MsZDxEAlXLnlhvQpARQYbErwZZIXYY.png',
+    displayMode: 'contain',
   },
   {
     id: 'basket-2',
@@ -122,6 +124,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kor45-RI91JNpdz7g6H19BGTUz2WL4vvSVsu.png',
+    displayMode: 'contain',
   },
   {
     id: 'basket-3',
@@ -131,6 +134,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     price: 50,
     inStock: true,
     imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kor321-D3XxbQhaZvTGox6B6UIqgS2LfUNybY.png',
+    displayMode: 'contain',
   },
   // Sets
   {

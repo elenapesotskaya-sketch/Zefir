@@ -15,6 +15,7 @@ interface ProductCardProps {
   inStock: boolean;
   imageUrl: string;
   imageUrl2?: string;
+  displayMode?: 'cover' | 'contain';
   isEditing: boolean;
   onSave: (data: {
     name: string;
@@ -33,6 +34,7 @@ export function ProductCard({
   inStock,
   imageUrl,
   imageUrl2,
+  displayMode = 'cover',
   isEditing,
   onSave,
 }: ProductCardProps) {
@@ -127,14 +129,14 @@ export function ProductCard({
     // View mode
     return (
       <div className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all hover:border-primary/40 group">
-        <div className="h-64 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background group/image">
+        <div className="h-64 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-background group/image flex items-center justify-center">
           <OptimizedImage
             src={currentImageUrl}
             alt={name}
             width={500}
             height={500}
             fill
-            className="object-cover group-hover:scale-110 transition-transform duration-300"
+            className={`${displayMode === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-110 transition-transform duration-300`}
             loading="lazy"
             sizes={RESPONSIVE_SIZES.product}
             quality={75}
