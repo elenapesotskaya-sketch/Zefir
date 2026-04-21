@@ -17,7 +17,7 @@ interface CatalogData {
 }
 
 const STORAGE_KEY = 'catalog-data';
-const CATALOG_VERSION = '2.1'; // Increment when catalog structure changes
+const CATALOG_VERSION = '2.2'; // Increment when catalog structure changes
 
 // Default catalog items from init-catalog.js
 const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
@@ -112,7 +112,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%BA%D0%B0%201-LEbNXhHKKvVUlPc6aNzGnfnvF2ViXd.png',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kor1-MsZDxEAlXLnlhvQpARQYbErwZZIXYY.png',
   },
   {
     id: 'basket-2',
@@ -121,7 +121,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%BA%D0%B0%202-2P4p3m0PvCuKHjCYnhHSXZM2Q3nxAE.png',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kor45-RI91JNpdz7g6H19BGTUz2WL4vvSVsu.png',
   },
   {
     id: 'basket-3',
@@ -130,7 +130,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%BA%D0%B0%203-hPvnGYl8oClnE2eBmTGHpAv2Z1hVWW.png',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kor321-D3XxbQhaZvTGox6B6UIqgS2LfUNybY.png',
   },
   // Sets
   {
@@ -140,8 +140,7 @@ const DEFAULT_CATALOG_ITEMS: CatalogItem[] = [
     description: 'Натуральный зефир ручной работы',
     price: 50,
     inStock: true,
-    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/N21-2AE2myFDAwxsklFhkDNo9Z8lLT5okE.jpg',
-    imageUrl2: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/N22-stSG5CSgu2Uwv0PXQIHrA7So4BhdBY.jpg',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/A123-FI3Tc1d9KfdpL0hhiqnj2iKJT0lpbZ.png',
   },
   {
     id: 'set-2',
